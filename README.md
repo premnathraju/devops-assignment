@@ -1,125 +1,53 @@
-# DevOps Assignment
+## Version Control Strategy
 
-This project consists of a FastAPI backend and a Next.js frontend that communicates with the backend.
+This repository follows a GitFlow-inspired branching model to ensure clean history,
+safe releases, and enterprise-level collaboration.
 
-## Project Structure
+### Branching Model
 
-```
-.
-├── backend/               # FastAPI backend
-│   ├── app/
-│   │   └── main.py       # Main FastAPI application
-│   └── requirements.txt    # Python dependencies
-└── frontend/              # Next.js frontend
-    ├── pages/
-    │   └── index.js     # Main page
-    ├── public/            # Static files
-    └── package.json       # Node.js dependencies
-```
+- **`main`**
+  - Contains production-ready, stable code
+  - Always deployable
+  - No direct commits are allowed
 
-## Prerequisites
+- **`develop`**
+  - Integration branch for ongoing development
+  - All features are merged here first
+  - Acts as a staging branch before production
 
-- Python 3.8+
-- Node.js 16+
-- npm or yarn
+- **`feature/*`**
+  - Used for implementing individual features, fixes, or improvements
+  - Created from `develop`
+  - Example: `feature/version-control-cleanup`
 
-## Backend Setup
+### Development Workflow
 
-1. Navigate to the backend directory:
-   ```bash
-   cd backend
-   ```
+1. New work starts from the `develop` branch.
+2. A dedicated `feature/*` branch is created for each task.
+3. Changes are committed with clear, meaningful messages.
+4. A Pull Request (PR) is opened from `feature/*` → `develop`.
+5. After review and validation, the PR is merged into `develop`.
+6. Once stable, a Pull Request is created from `develop` → `main`.
+7. Production releases occur only via PR merges into `main`.
 
-2. Create a virtual environment (recommended):
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: .\venv\Scripts\activate
-   ```
+### Commit & Merge Practices
 
-3. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
+- Commits are small, atomic, and focused on a single change.
+- Commit messages follow a descriptive format such as:
+  - `feat:` for new features
+  - `fix:` for bug fixes
+  - `docs:` for documentation updates
+- All merges into `develop` and `main` are performed using Pull Requests.
+- Build artifacts and dependencies (`node_modules`, `.next`, `venv`, etc.)
+  are excluded using `.gitignore`.
 
-4. Run the FastAPI server:
-   ```bash
-   uvicorn app.main:app --reload --port 8000
-   ```
+### Pull Request Policy
 
-   The backend will be available at `http://localhost:8000`
+- Pull Requests are mandatory for merging into `develop` and `main`.
+- PRs provide:
+  - Code review opportunities
+  - Audit trail of changes
+  - Safer and more reliable releases
 
-## Frontend Setup
-
-1. Navigate to the frontend directory:
-   ```bash
-   cd frontend
-   ```
-
-2. Install dependencies:
-   ```bash
-   npm install
-   # or
-   yarn
-   ```
-
-3. Configure the backend URL (if different from default):
-   - Open `.env.local`
-   - Update `NEXT_PUBLIC_API_URL` with your backend URL
-   - Example: `NEXT_PUBLIC_API_URL=https://your-backend-url.com`
-
-4. Run the development server:
-   ```bash
-   npm run dev
-   # or
-   yarn dev
-   ```
-
-   The frontend will be available at `http://localhost:3000`
-
-## Changing the Backend URL
-
-To change the backend URL that the frontend connects to:
-
-1. Open the `.env.local` file in the frontend directory
-2. Update the `NEXT_PUBLIC_API_URL` variable with your new backend URL
-3. Save the file
-4. Restart the Next.js development server for changes to take effect
-
-Example:
-```
-NEXT_PUBLIC_API_URL=https://your-new-backend-url.com
-```
-
-## For deployment:
-   ```bash
-   npm run build
-   # or
-   yarn build
-   ```
-
-   AND
-
-   ```bash
-   npm run start
-   # or
-   yarn start
-   ```
-
-   The frontend will be available at `http://localhost:3000`
-
-## Testing the Integration
-
-1. Ensure both backend and frontend servers are running
-2. Open the frontend in your browser (default: http://localhost:3000)
-3. If everything is working correctly, you should see:
-   - A status message indicating the backend is connected
-   - The message from the backend: "You've successfully integrated the backend!"
-   - The current backend URL being used
-
-## API Endpoints
-
-- `GET /api/health`: Health check endpoint
-  - Returns: `{"status": "healthy", "message": "Backend is running successfully"}`
-
-- `GET /api/message`: Get the integration message
-  - Returns: `{"message": "You've successfully integrated the backend!"}`
+This strategy aligns with industry best practices and supports CI/CD automation,
+collaborative development, and stable production deployments.
